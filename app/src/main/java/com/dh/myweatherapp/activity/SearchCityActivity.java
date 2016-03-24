@@ -27,7 +27,6 @@ public class SearchCityActivity extends AppCompatActivity{
 
     private LocationClient mLocationClient = null;
     private LocationClientOption mLocationClientOption = null;
- //   public BDLocationListener myListener = new MyLocationListener();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
