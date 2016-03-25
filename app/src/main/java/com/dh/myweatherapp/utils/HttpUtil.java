@@ -1,5 +1,8 @@
 package com.dh.myweatherapp.utils;
 
+import android.text.TextUtils;
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,7 +43,6 @@ public class HttpUtil {
             String strRead = null;
             while ((strRead = reader.readLine()) != null) {
                 sbf.append(strRead);
-                sbf.append("\r\n");
             }
             reader.close();
             result = sbf.toString();
@@ -50,15 +52,16 @@ public class HttpUtil {
         return result;
     }
 
-    public static String getCitylistJson(String httpUrl, String httpArg){
-        return request(httpUrl,httpArg);
+    public static String getCitylistJson(String cityStr){
+        String httpArg = "cityname="+EncodeAndDecodeUtil.getURLEncode(cityStr);
+        return request(CITYLIST_URL,httpArg);
     }
 
-    public static String getCityinfoJson(String httpUrl, String httpArg){
-        return request(httpUrl,httpArg);
+    public static String getCityinfoJson(String httpArg){
+        return request(CITYINFO_URL,httpArg);
     }
 
-    public static String getRecentWeathersJson(String httpUrl, String httpArg) {
-        return request(httpUrl,httpArg);
+    public static String getRecentWeathersJson(String httpArg) {
+        return request(RECENT_WEATHERS_URL,httpArg);
     }
 }

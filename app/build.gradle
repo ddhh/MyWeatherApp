@@ -26,6 +26,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:design:23.1.0'
+    compile 'com.yqritc:recyclerview-flexibledivider:1.2.9'
     compile files('libs/locSDK_6.23.jar')
     compile 'com.google.code.gson:gson:2.6.2'
+
 }

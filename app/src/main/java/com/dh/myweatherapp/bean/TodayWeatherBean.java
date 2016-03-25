@@ -9,7 +9,6 @@ public class TodayWeatherBean {
 
     private WeatherBean tody;
     private List<IndexBean> index;
-
     public List<IndexBean> getIndex() {
         return index;
     }

@@ -50,4 +50,16 @@ public class CityBean {
     public void setArea_id(String area_id) {
         this.area_id = area_id;
     }
+
+
+    @Override
+    public String toString() {
+        return "CityBean{" +
+                "province_cn='" + province_cn + '\'' +
+                ", district_cn='" + district_cn + '\'' +
+                ", name_cn='" + name_cn + '\'' +
+                ", name_en='" + name_en + '\'' +
+                ", area_id='" + area_id + '\'' +
+                '}';
+    }
 }
