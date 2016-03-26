@@ -17,11 +17,11 @@ import java.util.List;
 public class JsonUtil {
 
     public static CityListBean getCityList(String jsonString) {
-        Log.d("JsonUtil", jsonString);
+//        Log.d("JsonUtil", jsonString);
         CityListBean clb = new CityListBean();
         Gson gson = new Gson();
         clb = gson.fromJson(jsonString, new TypeToken<CityListBean>(){}.getType());
-        Log.d("JsonUtil", clb.toString());
+  //      Log.d("JsonUtil", clb.toString());
         return clb;
     }
 

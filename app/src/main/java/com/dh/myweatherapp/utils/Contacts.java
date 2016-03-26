@@ -5,6 +5,14 @@ package com.dh.myweatherapp.utils;
  */
 public class Contacts {
 
+    public static final String[] CHINA_PROVINCE = {
+            "北京","天津","上海","重庆",
+            "河北","河南","山西","山东","湖南","湖北","广西","广东",
+            "黑龙江","吉林","辽宁","内蒙古","陕西","青海","新疆","西藏",
+            "江苏","浙江","安徽","福建","江西","海南","四川","贵州","云南","甘肃","宁夏",
+            "香港","澳门","台湾"
+    };
+
     public static final String[] HOT_CITYS = {
             "定位","北京","上海",
             "广州","深圳","珠海",

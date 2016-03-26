@@ -14,7 +14,11 @@ public class HttpUtilTest {
 
     @Test
     public void testRequest() throws Exception {
-        String result = HttpUtil.request(HttpUtil.CITYLIST_URL, "cityname=%E6%9C%9D%E9%98%B3");
-        System.out.print(result);
+
+        for(int i=0;i<Contacts.CHINA_PROVINCE.length;i++){
+            String province = EncodeAndDecodeUtil.getURLEncode(Contacts.CHINA_PROVINCE[i]);
+            String result = HttpUtil.request(HttpUtil.CITYLIST_URL, "cityname="+province);
+            System.out.println(JsonUtil.getCityList(result).toString());
+        }
     }
 }
