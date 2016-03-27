@@ -34,4 +34,7 @@ public class Contacts {
             "","","",
     };
 
+
+    public static final String SHARED_XML_NAME = "manageCity";
+
 }

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.dh.myweatherapp.bean.CityBean;
 import com.dh.myweatherapp.bean.CityListBean;
+import com.dh.myweatherapp.bean.RecentWeathersBean;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -23,6 +24,15 @@ public class JsonUtil {
         clb = gson.fromJson(jsonString, new TypeToken<CityListBean>(){}.getType());
   //      Log.d("JsonUtil", clb.toString());
         return clb;
+    }
+
+
+    public static RecentWeathersBean getRecentWeather(String jsonString){
+        RecentWeathersBean rwb = new RecentWeathersBean();
+        Gson gson = new Gson();
+        rwb = gson.fromJson(jsonString,new TypeToken<RecentWeathersBean>(){}.getType());
+        Log.d("JsonUtil", rwb.toString());
+        return rwb;
     }
 
 }

@@ -78,4 +78,17 @@ public class WeatherBean  {
     public void setType(String type) {
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return "WeatherBean{" +
+                "date='" + date + '\'' +
+                ", week='" + week + '\'' +
+                ", fengxiang='" + fengxiang + '\'' +
+                ", fengli='" + fengli + '\'' +
+                ", hightemp='" + hightemp + '\'' +
+                ", lowtemp='" + lowtemp + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
 }

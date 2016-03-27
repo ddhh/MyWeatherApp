@@ -58,4 +58,15 @@ public class IndexBean {
     public void setOtherName(String otherName) {
         this.otherName = otherName;
     }
+
+    @Override
+    public String toString() {
+        return "IndexBean{" +
+                "name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", index='" + index + '\'' +
+                ", details='" + details + '\'' +
+                ", otherName='" + otherName + '\'' +
+                '}';
+    }
 }

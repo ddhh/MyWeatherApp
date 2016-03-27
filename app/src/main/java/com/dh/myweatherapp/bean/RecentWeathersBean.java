@@ -7,49 +7,40 @@ import java.util.List;
  */
 public class RecentWeathersBean {
 
-    private String city; //城市名
-    private String cityid;//城市ID
-    private TodayWeatherBean today;//今天的天气
-    private ForecastWeatherBean forecast;//未来四天的天气
-    private HistoryWeatherBean history;  //历史七天的天气
+    private int errNum;
+    private String errMsg;
+    private WeatherRetData retData;
 
-    public String getCity() {
-        return city;
+    public int getErrNum() {
+        return errNum;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setErrNum(int errNum) {
+        this.errNum = errNum;
     }
 
-    public String getCityid() {
-        return cityid;
+    public String getErrMsg() {
+        return errMsg;
     }
 
-    public void setCityid(String cityid) {
-        this.cityid = cityid;
+    public void setErrMsg(String errMsg) {
+        this.errMsg = errMsg;
     }
 
-    public TodayWeatherBean getToday() {
-        return today;
+    public WeatherRetData getRetData() {
+        return retData;
     }
 
-    public void setToday(TodayWeatherBean today) {
-        this.today = today;
+    public void setRetData(WeatherRetData retData) {
+        this.retData = retData;
     }
 
-    public ForecastWeatherBean getForecast() {
-        return forecast;
-    }
-
-    public void setForecast(ForecastWeatherBean forecast) {
-        this.forecast = forecast;
-    }
-
-    public HistoryWeatherBean getHistory() {
-        return history;
-    }
-
-    public void setHistory(HistoryWeatherBean history) {
-        this.history = history;
+    @Override
+    public String toString() {
+        return "RecentWeathersBean{" +
+                "errNum=" + errNum +
+                ", errMsg='" + errMsg + '\'' +
+                ", retData=" + retData +
+                '}';
     }
 }

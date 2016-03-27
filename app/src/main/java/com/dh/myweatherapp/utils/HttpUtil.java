@@ -57,11 +57,9 @@ public class HttpUtil {
         return request(CITYLIST_URL,httpArg);
     }
 
-    public static String getCityinfoJson(String httpArg){
-        return request(CITYINFO_URL,httpArg);
-    }
-
-    public static String getRecentWeathersJson(String httpArg) {
+    public static String getRecentWeathersJson (String cityId){
+        String httpArg = "cityid="+cityId;
         return request(RECENT_WEATHERS_URL,httpArg);
     }
+
 }

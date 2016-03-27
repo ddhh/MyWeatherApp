@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/today_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp"
+                android:text="17°"
+                android:textSize="80sp" />
+
+            <TextView
+                android:id="@+id/today_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="晴"
+                android:textSize="24dp" />
+
+            <GridView
+                android:id="@+id/index"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:numColumns="3" />
+
+            <include
+                android:id="@+id/yesterday"
+                layout="@layout/rencent_weather_item" />
+
+            <include
+                android:id="@+id/today"
+                layout="@layout/rencent_weather_item" />
+
+            <include
+                android:id="@+id/tomorrow"
+                layout="@layout/rencent_weather_item" />
+
+            <include
+                android:id="@+id/second"
+                layout="@layout/rencent_weather_item" />
+
+            <include
+                android:id="@+id/thrid"
+                layout="@layout/rencent_weather_item" />
+
+            <include
+                android:id="@+id/forth"
+                layout="@layout/rencent_weather_item" />
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.v4.widget.SwipeRefreshLayout>
