@@ -3,25 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:paddingTop="8dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:paddingLeft="32dp"
+    android:paddingRight="32dp"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp">
 
     <TextView
         android:id="@+id/day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="今天"
+        android:text=""
+        android:textColor="@android:color/white"
         android:textSize="16sp" />
 
     <TextView
         android:id="@+id/type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/day"
-        android:layout_alignRight="@+id/day"
         android:layout_below="@+id/day"
-        android:text="多云"
+        android:text=""
+        android:textColor="@android:color/white"
         android:textSize="16sp" />
 
     <TextView
@@ -31,7 +32,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="24°|8°"
+        android:text=""
+        android:textColor="@android:color/white"
         android:textSize="16sp" />
 
     <TextView
@@ -41,15 +43,14 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/temp"
-        android:text="南风4级"
+        android:text=""
+        android:textColor="@android:color/white"
         android:textSize="16sp" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignLeft="@+id/type"
-        android:layout_alignStart="@+id/type"
+        android:layout_height="1px"
         android:layout_below="@+id/type"
         android:layout_marginTop="4dp"
-        android:background="@android:color/darker_gray" />
+        android:background="@android:color/white" />
 </RelativeLayout>

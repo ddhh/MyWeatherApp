@@ -28,6 +28,7 @@ public class JsonUtil {
 
 
     public static RecentWeathersBean getRecentWeather(String jsonString){
+        Log.d("JsonUtil", jsonString);
         RecentWeathersBean rwb = new RecentWeathersBean();
         Gson gson = new Gson();
         rwb = gson.fromJson(jsonString,new TypeToken<RecentWeathersBean>(){}.getType());

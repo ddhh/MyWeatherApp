@@ -8,11 +8,14 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dh.myweatherapp.R;
+import com.dh.myweatherapp.activity.WeatherInfoActivity;
+import com.dh.myweatherapp.adapter.ExpandableListViewAdapter;
 import com.dh.myweatherapp.adapter.IndexGridViewAdapter;
 import com.dh.myweatherapp.bean.IndexBean;
 import com.dh.myweatherapp.bean.RecentWeathersBean;
@@ -40,12 +43,15 @@ public class WeatherInfoFragment extends Fragment {
 
     private List<RelativeLayout> rlsList = new ArrayList<>();
 
+    private ExpandableListView expandableListView;
+    private ExpandableListViewAdapter eAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_weather_info, container, false);
         initView(view);
-        String id = "";//父activity给的城市天气代码id
+        String id = ((WeatherInfoActivity)getActivity()).id;//父activity给的城市天气代码id
         new GetWeatherInfoTask().execute(id);
         return view;
     }
@@ -58,6 +64,9 @@ public class WeatherInfoFragment extends Fragment {
         gAdapter = new IndexGridViewAdapter(new ArrayList<IndexBean>());
         index.setAdapter(gAdapter);
         initRls(v);
+        expandableListView = (ExpandableListView) v.findViewById(R.id.expandableListView);
+        eAdapter = new ExpandableListViewAdapter(new ArrayList<IndexBean>());
+        expandableListView.setAdapter(eAdapter);
     }
 
     private void initRls(View v){
@@ -71,7 +80,15 @@ public class WeatherInfoFragment extends Fragment {
 
     private void rlsListDataSet(List<WeatherBean> lwb){
         for(int i=0;i<lwb.size();i++){
-            ((TextView)rlsList.get(i).getChildAt(0)).setText(lwb.get(i).getDate());
+            if(i==0){
+                ((TextView)rlsList.get(i).getChildAt(0)).setText("昨天");
+            }else if(i==1){
+                ((TextView)rlsList.get(i).getChildAt(0)).setText("今天");
+            }else if(i==2){
+                ((TextView)rlsList.get(i).getChildAt(0)).setText("明天");
+            }else{
+                ((TextView)rlsList.get(i).getChildAt(0)).setText(lwb.get(i).getWeek());
+            }
             ((TextView)rlsList.get(i).getChildAt(1)).setText(lwb.get(i).getType());
             ((TextView)rlsList.get(i).getChildAt(2)).setText(lwb.get(i).getHightemp()+"|"+lwb.get(i).getLowtemp());
             ((TextView)rlsList.get(i).getChildAt(3)).setText(lwb.get(i).getFengli());
@@ -97,8 +114,18 @@ public class WeatherInfoFragment extends Fragment {
             //forecast中的所有
             List<WeatherBean> tempList = new ArrayList<>();
             tempList.add(recentWeathersBean.getRetData().getHistory().get(recentWeathersBean.getRetData().getHistory().size()-1));
+            WeatherBean todayInfo = new WeatherBean();
+            todayInfo.setType(recentWeathersBean.getRetData().getToday().getType());
+            todayInfo.setFengli(recentWeathersBean.getRetData().getToday().getFengli());
+            todayInfo.setHightemp(recentWeathersBean.getRetData().getToday().getHightemp());
+            todayInfo.setLowtemp(recentWeathersBean.getRetData().getToday().getLowtemp());
+            tempList.add(todayInfo);
             tempList.addAll(recentWeathersBean.getRetData().getForecast());
             rlsListDataSet(tempList);
+
+            eAdapter.setList(recentWeathersBean.getRetData().getToday().getIndex());
+            eAdapter.notifyDataSetChanged();
+
         }
     }
 

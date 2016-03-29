@@ -6,6 +6,8 @@ import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -16,11 +18,16 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.dh.myweatherapp.R;
+import com.dh.myweatherapp.adapter.WeatherFragmentAdapter;
 import com.dh.myweatherapp.bean.RecentWeathersBean;
 import com.dh.myweatherapp.bean.WeatherBean;
+import com.dh.myweatherapp.fragment.WeatherInfoFragment;
 import com.dh.myweatherapp.utils.Contacts;
 import com.dh.myweatherapp.utils.HttpUtil;
 import com.dh.myweatherapp.utils.JsonUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 端辉 on 2016/3/24.
@@ -30,13 +37,17 @@ public class WeatherInfoActivity extends AppCompatActivity{
     public static final String INTENT_CITY_ID = "INTENT_CITY_ID";
     public static final String INTENT_CITY_NAME = "INTENT_CITY_NAME";
 
-    private String id;
+    public String id;
     private String name;
 
     private Toolbar toolbar;
     private TextView tv_title;
 
     private SharedPreferences spf;
+
+    private ViewPager viewPager;
+    private WeatherFragmentAdapter wAdapter;
+    private List<Fragment> mList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,7 +56,6 @@ public class WeatherInfoActivity extends AppCompatActivity{
         id = getIntent().getStringExtra(INTENT_CITY_ID);
         name = getIntent().getStringExtra(INTENT_CITY_NAME);
         initView();
-        new GetWeatherInfoTask().execute(id);
         spf = getSharedPreferences(Contacts.SHARED_XML_NAME,MODE_PRIVATE);
     }
 
@@ -53,9 +63,10 @@ public class WeatherInfoActivity extends AppCompatActivity{
     protected void onStart() {
         super.onStart();
         Editor edit = spf.edit();
-        if(TextUtils.isEmpty(spf.getString(id,""))){
-            edit.putString(id,name);
-        }
+//        if(spf.contains(id)){
+//            edit.putString(id,name);
+//        }
+        edit.clear();
         edit.commit();
     }
 
@@ -72,20 +83,10 @@ public class WeatherInfoActivity extends AppCompatActivity{
         getSupportActionBar().setTitle("");
         tv_title.setText(name);
 
-    }
-
-    //异步加载天气信息
-    class GetWeatherInfoTask extends AsyncTask<String,Void,RecentWeathersBean>{
-
-        @Override
-        protected RecentWeathersBean doInBackground(String... params) {
-            return JsonUtil.getRecentWeather(HttpUtil.getRecentWeathersJson(params[0]));
-        }
-
-        @Override
-        protected void onPostExecute(RecentWeathersBean recentWeathersBean) {
-            super.onPostExecute(recentWeathersBean);
-        }
+        viewPager = (ViewPager) findViewById(R.id.weather_pagers);
+        mList.add(new WeatherInfoFragment());
+        wAdapter = new WeatherFragmentAdapter(getSupportFragmentManager(),mList);
+        viewPager.setAdapter(wAdapter);
     }
 
 
