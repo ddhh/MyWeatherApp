@@ -2,6 +2,8 @@ package com.dh.myweatherapp.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 
 import com.dh.myweatherapp.R;
 import com.dh.myweatherapp.adapter.ManageCityListAdapter;
+import com.dh.myweatherapp.db.DBHelper;
 import com.dh.myweatherapp.utils.Contacts;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -40,6 +43,10 @@ public class ManageCityActivity extends AppCompatActivity implements View.OnClic
     private RecyclerView recyclerView;
     private ManageCityListAdapter mAdapter;
     private List<String[]> mList = new ArrayList<>();
+
+    private SQLiteDatabase db;
+
+    private boolean isDelete;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,21 +80,42 @@ public class ManageCityActivity extends AppCompatActivity implements View.OnClic
 
             }
         });
+        mAdapter.setOnDeleteListener(new ManageCityListAdapter.OnDeleteListener() {
+            @Override
+            public void itemDelete(int position) {
+                if(deleteCity(mAdapter.list.get(position)[0])) {
+                    mAdapter.list.remove(position);
+                    mAdapter.notifyDataSetChanged();
+                    isDelete = true;
+                }
+            }
+        });
 
         recyclerView.setAdapter(mAdapter);
     }
 
-    private List<String[]> getSharedDate() {
-        SharedPreferences spf = getSharedPreferences(Contacts.SHARED_XML_NAME, MODE_PRIVATE);
-        Map<String, String> map = (Map<String, String>) spf.getAll();
-        Iterator iter1 = (Iterator) map.values().iterator();
-        Iterator iter2 = (Iterator) map.keySet().iterator();
-        while (iter1.hasNext() && iter2.hasNext()) {
-            String name = iter1.next().toString();
-            String id = iter2.next().toString();
-            mList.add(new String[]{id, name});
+    private boolean deleteCity(String id){
+        db = DBHelper.getInstance(this).getWritableDatabase();
+        if(db.delete("weatherInfo","area_id=?",new String[]{id})>0){
+            return true;
         }
-        return mList;
+        return false;
+    }
+
+    private List<String[]> getSharedDate() {
+        List<String[]> list = new ArrayList<>();
+        db = DBHelper.getInstance(this).getWritableDatabase();
+        Cursor cursor = db.query("weatherInfo",new String[]{"area_id,name_cn"},null,null,null,null,null);
+        if(cursor!=null&&cursor.getCount()>0){
+            while (cursor.moveToNext()) {
+                String id = cursor.getString(cursor.getColumnIndex("area_id"));
+                String name = cursor.getString(cursor.getColumnIndex("name_cn"));
+                list.add(new String[]{id, name});
+            }
+        }
+        mList = list;
+        cursor.close();
+        return list;
     }
 
 
@@ -101,6 +129,9 @@ public class ManageCityActivity extends AppCompatActivity implements View.OnClic
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                if(isDelete){
+                    setResult(3);
+                }
                 finish();
                 return true;
             case R.id.action_edit:
@@ -136,7 +167,16 @@ public class ManageCityActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         if (v.getId() == R.id.action_add) {
             Intent intent = new Intent(ManageCityActivity.this, SearchCityActivity.class);
-            startActivity(intent);
+            intent.putExtra(SearchCityActivity.INTENT_FROM_MANAGER,"s");
+            startActivityForResult(intent,1);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==2){
+            setResult(2,data);
             finish();
         }
     }

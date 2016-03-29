@@ -1,5 +1,6 @@
 package com.dh.myweatherapp.adapter;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -19,7 +20,9 @@ public class ManageCityListAdapter extends RecyclerView.Adapter {
 
     public List<String[]> list;
 
-    private OnItemClickListener listener;
+    private OnItemClickListener itemClickListener;
+
+    private OnDeleteListener deleteListener;
 
     public ManageCityListAdapter(List<String[]> list) {
         this.list = list;
@@ -75,17 +78,23 @@ public class ManageCityListAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     //TODO 删除选中的城市
-                    list.remove(position);
-                    notifyDataSetChanged();
+                    deleteListener.itemDelete(position);
                 }
             });
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.itemClick();
+                    itemClickListener.itemClick();
                 }
             });
         }
+    }
+
+    public interface OnDeleteListener{
+        public void itemDelete(int position);
+    }
+    public void setOnDeleteListener(OnDeleteListener listener){
+        this.deleteListener = listener;
     }
 
     public interface OnItemClickListener {
@@ -93,7 +102,7 @@ public class ManageCityListAdapter extends RecyclerView.Adapter {
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
+        this.itemClickListener = listener;
     }
 
 }

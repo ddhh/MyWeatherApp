@@ -11,6 +11,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
@@ -33,6 +34,7 @@ import com.dh.myweatherapp.utils.HttpUtil;
 import com.dh.myweatherapp.utils.JsonUtil;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,8 @@ import java.util.List;
  * Created by 端辉 on 2016/3/24.
  */
 public class SearchCityActivity extends AppCompatActivity{
+
+    public static final String INTENT_FROM_MANAGER = "INTENT_FROM_MANAGER";
 
     private Toolbar toolbar;
     private SearchView searchView;
@@ -50,12 +54,12 @@ public class SearchCityActivity extends AppCompatActivity{
 
     private RecyclerView recyclerView;
     private SearchCityResultListAdapter mAdapter;
-    private SearchCityResultListAdapter_02 adapter_02;
-
 
     private LocationClient mLocationClient = null;
     private LocationClientOption mLocationClientOption = null;
     private BDLocation bdLocation = null;
+
+    private boolean isOp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +75,7 @@ public class SearchCityActivity extends AppCompatActivity{
         getSupportActionBar().setTitle("");
 
         searchView = (SearchView) findViewById(R.id.search_view);
+        searchView.setFocusable(false);
         searchView.setIconifiedByDefault(false);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -84,13 +89,10 @@ public class SearchCityActivity extends AppCompatActivity{
                     rl.setVisibility(View.VISIBLE);
                     mAdapter.setList(new ArrayList<CityBean>());
                     mAdapter.notifyDataSetChanged();
-//                    adapter_02.setList(new ArrayList<SearchCityResultBean>());
-//                    adapter_02.notifyDataSetChanged();
-                    //关闭输入法
+                    //TODO 关闭输入法
                 }else{
                     rl.setVisibility(View.GONE);
                     new SearchCityTask().execute(newText);
-                //    new SearchCityTask_02().execute(newText);
                 }
                 return true;
             }
@@ -106,13 +108,11 @@ public class SearchCityActivity extends AppCompatActivity{
                     //TODO 定位获取位置
                     String result = bdLocation.getDistrict();
                     result = result.substring(0,result.length()-1);
-                    Log.d("SearchCityActivity", result);
                     searchView.setQuery(result,true);
                     return;
                 }
                 //TODO 获取相应城市信息
                 searchView.setQuery(Contacts.HOT_CITYS[position],true);
-                Toast.makeText(SearchCityActivity.this,Contacts.HOT_CITYS[position],Toast.LENGTH_SHORT).show();
             }
         });
         gridView.setAdapter(hAapter);
@@ -127,21 +127,22 @@ public class SearchCityActivity extends AppCompatActivity{
                         .marginResId(R.dimen.activity_horizontal_margin, R.dimen.activity_horizontal_margin)
                         .build());
         mAdapter = new SearchCityResultListAdapter(new ArrayList<CityBean>());
-    //    adapter_02 = new SearchCityResultListAdapter_02(new ArrayList<SearchCityResultBean>());
         mAdapter.setOnItemSelectListener(new SearchCityResultListAdapter.OnItemSelectListener() {
             @Override
             public void onItemSelect(String id,String name) {
-                Toast.makeText(SearchCityActivity.this,"点击",Toast.LENGTH_SHORT).show();
                 //TODO 查询结果的点击事件，跳转到天气信息界面,再异步加载该城市天气数据
-                Intent intent = new Intent(SearchCityActivity.this,WeatherInfoActivity.class);
+                Intent intent = new Intent();
                 intent.putExtra(WeatherInfoActivity.INTENT_CITY_ID,id);
                 intent.putExtra(WeatherInfoActivity.INTENT_CITY_NAME,name);
-                startActivity(intent);
+                if(!TextUtils.isEmpty(getIntent().getStringExtra(INTENT_FROM_MANAGER))){
+                    setResult(2,intent);
+                }else {
+                    setResult(1, intent);
+                }
                 finish();
             }
         });
         recyclerView.setAdapter(mAdapter);
-   //     recyclerView.setAdapter(adapter_02);
     }
 
 
@@ -178,36 +179,5 @@ public class SearchCityActivity extends AppCompatActivity{
             mAdapter.notifyDataSetChanged();
         }
     }
-
-
-    class SearchCityTask_02 extends AsyncTask<String,Void,List<SearchCityResultBean>>{
-
-        @Override
-        protected List<SearchCityResultBean> doInBackground(String... params) {
-            return DBUtil.getCityListFromDB(params[0]);
-        }
-
-        @Override
-        protected void onPostExecute(List<SearchCityResultBean> searchCityResultBeen) {
-            super.onPostExecute(searchCityResultBeen);
-            adapter_02.setList(searchCityResultBeen);
-            adapter_02.notifyDataSetChanged();
-        }
-    }
-
-//    private void hideSoftInput() {
-//        InputMethodManager inputMethodManager;
-//        inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-//        if (inputMethodManager != null) {
-//            View v = this.getCurrentFocus();
-//            if (v == null) {
-//                return;
-//            }
-//
-//            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(),
-//                    InputMethodManager.HIDE_NOT_ALWAYS);
-//            searchView.clearFocus();
-//        }
-//    }
 
 }

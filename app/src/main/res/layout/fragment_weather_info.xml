@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/weather_swipe"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,50 +33,58 @@
                 android:textColor="@android:color/white"
                 android:textSize="24dp" />
 
-            <com.dh.myweatherapp.view.MyGridView
-                android:id="@+id/index"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:numColumns="3"
-                android:visibility="gone"
-                android:verticalSpacing="0dp"
-                android:horizontalSpacing="0dp"
-                android:stretchMode="columnWidth"/>
+            <!--<com.dh.myweatherapp.view.MyGridView-->
+                <!--android:id="@+id/index"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:gravity="center"-->
+                <!--android:horizontalSpacing="0dp"-->
+                <!--android:numColumns="3"-->
+                <!--android:stretchMode="columnWidth"-->
+                <!--android:verticalSpacing="0dp"-->
+                <!--android:visibility="gone" />-->
 
             <com.dh.myweatherapp.view.MyExpandableListView
-                android:layout_margin="16dp"
+                android:id="@+id/expandableListView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/expandableListView" />
+                android:layout_margin="16dp" />
 
-            <include
-                android:id="@+id/yesterday"
-                layout="@layout/rencent_weather_item" />
+            <LinearLayout
+                android:id="@+id/recent_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <include
-                android:id="@+id/today"
-                layout="@layout/rencent_weather_item" />
+                <include
+                    android:id="@+id/yesterday"
+                    layout="@layout/rencent_weather_item" />
 
-            <include
-                android:id="@+id/tomorrow"
-                layout="@layout/rencent_weather_item" />
+                <include
+                    android:id="@+id/today"
+                    layout="@layout/rencent_weather_item" />
 
-            <include
-                android:id="@+id/second"
-                layout="@layout/rencent_weather_item" />
+                <include
+                    android:id="@+id/tomorrow"
+                    layout="@layout/rencent_weather_item" />
 
-            <include
-                android:id="@+id/thrid"
-                layout="@layout/rencent_weather_item" />
+                <include
+                    android:id="@+id/second"
+                    layout="@layout/rencent_weather_item" />
 
-            <include
-                android:id="@+id/forth"
-                layout="@layout/rencent_weather_item" />
+                <include
+                    android:id="@+id/thrid"
+                    layout="@layout/rencent_weather_item" />
 
+                <include
+                    android:id="@+id/forth"
+                    layout="@layout/rencent_weather_item" />
+
+            </LinearLayout>
         </LinearLayout>
+
     </ScrollView>
 
 </android.support.v4.widget.SwipeRefreshLayout>

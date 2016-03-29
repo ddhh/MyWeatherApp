@@ -16,7 +16,15 @@ public class DBHelper extends SQLiteOpenHelper{
 
     public static final String DATABASE = "weather.db";
     public static final int VERSION = 1;
-    public static final String TABLE = "";
+    public static final String TABLE = "create table weatherInfo(area_id text primary key,name_cn text not null,json_str text not null,last_time text not null)";
+
+    private static DBHelper dbHelper;
+    public static DBHelper getInstance(Context context){
+        if(dbHelper==null){
+            dbHelper = new DBHelper(context);
+        }
+        return dbHelper;
+    }
 
     public DBHelper(Context context){
         this(context,DATABASE,null,VERSION);
