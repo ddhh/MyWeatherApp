@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,21 +85,28 @@ public class WeatherInfoFragment extends Fragment {
             city = name_cn;
             postData(JsonUtil.getRecentWeather(jsonStr));
             if (System.currentTimeMillis() - lastTime > 1000 * 60 * 60) {
-                swipe.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipe.setRefreshing(true);
-                    }
-                });
+                swipe.setProgressViewOffset(false, 0, (int) TypedValue
+                        .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
+                                .getDisplayMetrics()));
+//                swipe.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        swipe.setRefreshing(true);
+//                    }
+//                });
                 listener.onRefresh();
+
             }
         } else {
-            swipe.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipe.setRefreshing(true);
-                }
-            });
+            swipe.setProgressViewOffset(false, 0, (int) TypedValue
+                    .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
+                            .getDisplayMetrics()));
+//            swipe.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    swipe.setRefreshing(true);
+//                }
+//            });
             listener.onRefresh();
         }
     }
@@ -177,6 +185,7 @@ public class WeatherInfoFragment extends Fragment {
         protected void onPostExecute(RecentWeathersBean recentWeathersBean) {
             super.onPostExecute(recentWeathersBean);
             postData(recentWeathersBean);
+            swipe.setRefreshing(false);
         }
     }
 
@@ -198,7 +207,7 @@ public class WeatherInfoFragment extends Fragment {
 
         eAdapter.setList(recentWeathersBean.getRetData().getToday().getIndex());
         eAdapter.notifyDataSetChanged();
-        swipe.setRefreshing(false);
+
         scrollView.smoothScrollTo(0,0);
     }
 

@@ -83,7 +83,7 @@ public class ManageCityActivity extends AppCompatActivity implements View.OnClic
         mAdapter.setOnDeleteListener(new ManageCityListAdapter.OnDeleteListener() {
             @Override
             public void itemDelete(int position) {
-                if(deleteCity(mAdapter.list.get(position)[0])) {
+                if (deleteCity(mAdapter.list.get(position)[0])) {
                     mAdapter.list.remove(position);
                     mAdapter.notifyDataSetChanged();
                     isDelete = true;
@@ -94,9 +94,9 @@ public class ManageCityActivity extends AppCompatActivity implements View.OnClic
         recyclerView.setAdapter(mAdapter);
     }
 
-    private boolean deleteCity(String id){
+    private boolean deleteCity(String id) {
         db = DBHelper.getInstance(this).getWritableDatabase();
-        if(db.delete("weatherInfo","area_id=?",new String[]{id})>0){
+        if (db.delete("weatherInfo", "area_id=?", new String[]{id}) > 0) {
             return true;
         }
         return false;
@@ -105,8 +105,8 @@ public class ManageCityActivity extends AppCompatActivity implements View.OnClic
     private List<String[]> getSharedDate() {
         List<String[]> list = new ArrayList<>();
         db = DBHelper.getInstance(this).getWritableDatabase();
-        Cursor cursor = db.query("weatherInfo",new String[]{"area_id,name_cn"},null,null,null,null,null);
-        if(cursor!=null&&cursor.getCount()>0){
+        Cursor cursor = db.query("weatherInfo", new String[]{"area_id,name_cn"}, null, null, null, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 String id = cursor.getString(cursor.getColumnIndex("area_id"));
                 String name = cursor.getString(cursor.getColumnIndex("name_cn"));
@@ -119,9 +119,12 @@ public class ManageCityActivity extends AppCompatActivity implements View.OnClic
     }
 
 
+    private Menu menu;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_manage_city, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -129,18 +132,18 @@ public class ManageCityActivity extends AppCompatActivity implements View.OnClic
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if(isDelete){
+                if (isDelete) {
                     setResult(3);
                 }
                 finish();
                 return true;
             case R.id.action_edit:
-                if (mAdapter.isEdit){
+                if (mAdapter.isEdit) {
                     mAdapter.isEdit = false;
                     mAdapter.notifyDataSetChanged();
                     item.setIcon(R.drawable.ic_edit_white_36dp);
                     getSupportActionBar().setTitle("城市管理");
-                }else{
+                } else {
                     mAdapter.isEdit = true;
                     mAdapter.notifyDataSetChanged();
                     item.setIcon(R.drawable.ic_clear_white_36dp);
@@ -154,9 +157,14 @@ public class ManageCityActivity extends AppCompatActivity implements View.OnClic
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (isDelete) {
+                setResult(3);
+            }
             if (mAdapter.isEdit) {
                 mAdapter.isEdit = false;
                 mAdapter.notifyDataSetChanged();
+                MenuItem item = menu.findItem(R.id.action_edit);
+                item.setIcon(R.drawable.ic_edit_white_36dp);
                 return true;
             }
         }
@@ -167,16 +175,16 @@ public class ManageCityActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         if (v.getId() == R.id.action_add) {
             Intent intent = new Intent(ManageCityActivity.this, SearchCityActivity.class);
-            intent.putExtra(SearchCityActivity.INTENT_FROM_MANAGER,"s");
-            startActivityForResult(intent,1);
+            intent.putExtra(SearchCityActivity.INTENT_FROM_MANAGER, "s");
+            startActivityForResult(intent, 1);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==2){
-            setResult(2,data);
+        if (resultCode == 2) {
+            setResult(2, data);
             finish();
         }
     }

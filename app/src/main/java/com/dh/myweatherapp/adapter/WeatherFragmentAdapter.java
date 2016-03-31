@@ -35,20 +35,6 @@ public class WeatherFragmentAdapter extends FragmentStatePagerAdapter {
         this.list = list;
     }
 
-    public void setFragmentList(List<WeatherInfoFragment> fragments){
-        if(list!=null){
-            FragmentTransaction ft = fm.beginTransaction();
-            for(WeatherInfoFragment wf:list){
-                ft.remove(wf);
-            }
-            ft.commit();
-            ft = null;
-            fm.executePendingTransactions();
-        }
-        list = fragments;
-        notifyDataSetChanged();
-    }
-
     @Override
     public Fragment getItem(int position) {
         return list.get(position);

@@ -51,27 +51,25 @@ public class WeatherInfoActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TextView tv_title;
 
-//    private SharedPreferences spf;
 
     private ViewPager viewPager;
     private WeatherFragmentAdapter wAdapter;
     private List<WeatherInfoFragment> mList = new ArrayList<>();
-
-    private FragmentManager fm;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather_info);
         initView();
-        initDB();
+        if (checkDataExist()) {
+            initDB();
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==1||resultCode==2) {
+        if (resultCode == 1 || resultCode == 2) {
             id = data.getStringExtra(INTENT_CITY_ID);
             name = data.getStringExtra(INTENT_CITY_NAME);
             if (!TextUtils.isEmpty(id)) {
@@ -80,22 +78,27 @@ public class WeatherInfoActivity extends AppCompatActivity {
                         return;
                     }
                 }
+                initDB();
                 WeatherInfoFragment f = new WeatherInfoFragment();
                 f.weatherId = id;
                 f.city = name;
                 mList.add(f);
                 wAdapter.setList(mList);
                 wAdapter.notifyDataSetChanged();
-//                wAdapter.setFragmentList(mList);
-                viewPager.setCurrentItem(mList.size()-1);
-                tv_title.setText(mList.get(mList.size()-1).city);
+                viewPager.setCurrentItem(mList.size() - 1);
+                tv_title.setText(mList.get(mList.size() - 1).city);
             }
-        }else if(resultCode==3){
-            initDB();
+        } else if (resultCode == 3) {
+            if (checkDataExist()) {
+                initDB();
+            }
+        } else if (resultCode == 4) {
+            finish();
         }
     }
 
-    private void initDB() {
+
+    private boolean checkDataExist() {
         dbHelper = DBHelper.getInstance(this);
         db = dbHelper.getWritableDatabase();
         Cursor cursor = db.query("weatherInfo", new String[]{"count(*)"}, null, null, null, null, null);
@@ -103,12 +106,21 @@ public class WeatherInfoActivity extends AppCompatActivity {
             cursor.moveToFirst();
             if (cursor.getInt(cursor.getColumnIndex("count(*)")) == 0) {
                 cursor.close();
+                mList.clear();
+                wAdapter.setList(mList);
+                wAdapter.notifyDataSetChanged();
                 Intent intent = new Intent(WeatherInfoActivity.this, SearchCityActivity.class);
-                startActivityForResult(intent,1);
-                return;
+                startActivityForResult(intent, 1);
+                return false;
             }
         }
-        cursor = db.query("weatherInfo", new String[]{"area_id","name_cn"}, null, null, null, null, null);
+        return true;
+    }
+
+    private void initDB() {
+        dbHelper = DBHelper.getInstance(this);
+        db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.query("weatherInfo", new String[]{"area_id", "name_cn"}, null, null, null, null, null);
         if (cursor != null && cursor.getCount() > 0) {
             mList.clear();
             while (cursor.moveToNext()) {
@@ -122,11 +134,52 @@ public class WeatherInfoActivity extends AppCompatActivity {
             }
             wAdapter.setList(mList);
             wAdapter.notifyDataSetChanged();
-//            wAdapter.setFragmentList(mList);
+
             tv_title.setText(mList.get(0).city);
+        } else {
+            mList.clear();
+            wAdapter.setList(mList);
+            wAdapter.notifyDataSetChanged();
         }
         cursor.close();
     }
+
+//    private void initDB() {
+//        dbHelper = DBHelper.getInstance(this);
+//        db = dbHelper.getWritableDatabase();
+//        Cursor cursor = db.query("weatherInfo", new String[]{"count(*)"}, null, null, null, null, null);
+//        if (cursor != null && cursor.getCount() > 0) {
+//            cursor.moveToFirst();
+//            if (cursor.getInt(cursor.getColumnIndex("count(*)")) == 0) {
+//                cursor.close();
+//                mList.clear();
+//                wAdapter.setList(mList);
+//                wAdapter.notifyDataSetChanged();
+//
+//                Intent intent = new Intent(WeatherInfoActivity.this, SearchCityActivity.class);
+//                startActivityForResult(intent,1);
+//                return;
+//            }
+//        }
+//        cursor = db.query("weatherInfo", new String[]{"area_id","name_cn"}, null, null, null, null, null);
+//        if (cursor != null && cursor.getCount() > 0) {
+//            mList.clear();
+//            while (cursor.moveToNext()) {
+//                String id = cursor.getString(cursor.getColumnIndex("area_id"));
+//                String name_cn = cursor.getString(cursor.getColumnIndex("name_cn"));
+//                WeatherInfoFragment f = new WeatherInfoFragment();
+//                f.weatherId = id;
+//                f.city = name_cn;
+//                f.isExit = true;
+//                mList.add(f);
+//            }
+//            wAdapter.setList(mList);
+//            wAdapter.notifyDataSetChanged();
+//
+//            tv_title.setText(mList.get(0).city);
+//        }
+//        cursor.close();
+//    }
 
     //初始化布局
     private void initView() {
@@ -136,8 +189,8 @@ public class WeatherInfoActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("");
 
         viewPager = (ViewPager) findViewById(R.id.weather_pagers);
-        viewPager.setOffscreenPageLimit(0);
-        wAdapter = new WeatherFragmentAdapter(fm = getSupportFragmentManager(), mList);
+
+        wAdapter = new WeatherFragmentAdapter(getSupportFragmentManager(), mList);
         viewPager.setAdapter(wAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -170,7 +223,7 @@ public class WeatherInfoActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_location:
                 Intent intent = new Intent(WeatherInfoActivity.this, ManageCityActivity.class);
-                startActivityForResult(intent,2);
+                startActivityForResult(intent, 2);
                 return true;
         }
         return super.onOptionsItemSelected(item);
