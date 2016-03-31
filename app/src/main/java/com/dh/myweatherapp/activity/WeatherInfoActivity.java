@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -56,6 +57,8 @@ public class WeatherInfoActivity extends AppCompatActivity {
     private WeatherFragmentAdapter wAdapter;
     private List<WeatherInfoFragment> mList = new ArrayList<>();
 
+    private FragmentManager fm;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,6 +86,7 @@ public class WeatherInfoActivity extends AppCompatActivity {
                 mList.add(f);
                 wAdapter.setList(mList);
                 wAdapter.notifyDataSetChanged();
+//                wAdapter.setFragmentList(mList);
                 viewPager.setCurrentItem(mList.size()-1);
                 tv_title.setText(mList.get(mList.size()-1).city);
             }
@@ -115,9 +119,10 @@ public class WeatherInfoActivity extends AppCompatActivity {
                 f.city = name_cn;
                 f.isExit = true;
                 mList.add(f);
-                wAdapter.setList(mList);
             }
+            wAdapter.setList(mList);
             wAdapter.notifyDataSetChanged();
+//            wAdapter.setFragmentList(mList);
             tv_title.setText(mList.get(0).city);
         }
         cursor.close();
@@ -132,7 +137,7 @@ public class WeatherInfoActivity extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.weather_pagers);
         viewPager.setOffscreenPageLimit(0);
-        wAdapter = new WeatherFragmentAdapter(getSupportFragmentManager(), mList);
+        wAdapter = new WeatherFragmentAdapter(fm = getSupportFragmentManager(), mList);
         viewPager.setAdapter(wAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

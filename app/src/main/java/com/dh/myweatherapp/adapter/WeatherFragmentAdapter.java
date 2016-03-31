@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.view.ViewGroup;
 
 import com.dh.myweatherapp.fragment.WeatherInfoFragment;
@@ -26,9 +27,26 @@ public class WeatherFragmentAdapter extends FragmentStatePagerAdapter {
 
     private List<WeatherInfoFragment> list;
 
+    private FragmentManager fm;
+
     public WeatherFragmentAdapter(FragmentManager fm,List<WeatherInfoFragment> list) {
         super(fm);
+        this.fm = fm;
         this.list = list;
+    }
+
+    public void setFragmentList(List<WeatherInfoFragment> fragments){
+        if(list!=null){
+            FragmentTransaction ft = fm.beginTransaction();
+            for(WeatherInfoFragment wf:list){
+                ft.remove(wf);
+            }
+            ft.commit();
+            ft = null;
+            fm.executePendingTransactions();
+        }
+        list = fragments;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -44,15 +62,5 @@ public class WeatherFragmentAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getItemPosition(Object object) {
         return POSITION_NONE;
-    }
-
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        return super.instantiateItem(container, position);
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        super.destroyItem(container, position, object);
     }
 }

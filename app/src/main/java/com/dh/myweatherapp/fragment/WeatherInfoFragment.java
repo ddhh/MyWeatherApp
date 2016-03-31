@@ -60,23 +60,10 @@ public class WeatherInfoFragment extends Fragment {
 
     public boolean isExit;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle b = getArguments();
-        if(b!=null){
-            b.putString("weatherID",weatherId);
-        }
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_weather_info, container, false);
-        Bundle b = getArguments();
-        if (b != null) {
-            weatherId = b.getString("weatherID");
-        }
         initView(view);
         checkDB(view);
         return view;
