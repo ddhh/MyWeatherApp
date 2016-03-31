@@ -2,23 +2,22 @@ package com.dh.myweatherapp.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.GridView;
+import android.widget.ListView;
 
 /**
- * Created by 端辉 on 2016/3/29.
+ * Created by 端辉 on 2016/3/31.
  */
-public class MyGridView extends GridView {
-
-    public MyGridView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public MyGridView(Context context) {
+public class MyListView extends ListView {
+    public MyListView(Context context) {
         super(context);
     }
 
-    public MyGridView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+    public MyListView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public MyListView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 
     @Override
@@ -28,6 +27,5 @@ public class MyGridView extends GridView {
                 MeasureSpec.AT_MOST);
         super.onMeasure(widthMeasureSpec, expandSpec);
     }
-
 
 }

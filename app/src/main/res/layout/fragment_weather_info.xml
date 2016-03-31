@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <ScrollView
+        android:id="@+id/weather_info_scrollview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -33,56 +34,21 @@
                 android:textColor="@android:color/white"
                 android:textSize="24dp" />
 
-            <!--<com.dh.myweatherapp.view.MyGridView-->
-                <!--android:id="@+id/index"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_centerHorizontal="true"-->
-                <!--android:layout_marginTop="16dp"-->
-                <!--android:gravity="center"-->
-                <!--android:horizontalSpacing="0dp"-->
-                <!--android:numColumns="3"-->
-                <!--android:stretchMode="columnWidth"-->
-                <!--android:verticalSpacing="0dp"-->
-                <!--android:visibility="gone" />-->
-
             <com.dh.myweatherapp.view.MyExpandableListView
                 android:id="@+id/expandableListView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"/>
 
-            <LinearLayout
-                android:id="@+id/recent_layout"
+            <com.dh.myweatherapp.view.MyListView
+                android:id="@+id/recent_list"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent"/>
 
-                <include
-                    android:id="@+id/yesterday"
-                    layout="@layout/rencent_weather_item" />
-
-                <include
-                    android:id="@+id/today"
-                    layout="@layout/rencent_weather_item" />
-
-                <include
-                    android:id="@+id/tomorrow"
-                    layout="@layout/rencent_weather_item" />
-
-                <include
-                    android:id="@+id/second"
-                    layout="@layout/rencent_weather_item" />
-
-                <include
-                    android:id="@+id/thrid"
-                    layout="@layout/rencent_weather_item" />
-
-                <include
-                    android:id="@+id/forth"
-                    layout="@layout/rencent_weather_item" />
-
-            </LinearLayout>
         </LinearLayout>
 
     </ScrollView>

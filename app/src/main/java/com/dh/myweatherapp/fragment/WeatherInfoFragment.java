@@ -1,7 +1,6 @@
 package com.dh.myweatherapp.fragment;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -9,26 +8,24 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.GridView;
-import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.dh.myweatherapp.R;
 import com.dh.myweatherapp.activity.WeatherInfoActivity;
 import com.dh.myweatherapp.adapter.ExpandableListViewAdapter;
-import com.dh.myweatherapp.adapter.IndexGridViewAdapter;
-import com.dh.myweatherapp.adapter.WeatherFragmentAdapter;
+import com.dh.myweatherapp.adapter.RecentListViewApdapter;
 import com.dh.myweatherapp.bean.IndexBean;
 import com.dh.myweatherapp.bean.RecentWeathersBean;
 import com.dh.myweatherapp.bean.WeatherBean;
 import com.dh.myweatherapp.db.DBHelper;
 import com.dh.myweatherapp.utils.HttpUtil;
 import com.dh.myweatherapp.utils.JsonUtil;
+import com.dh.myweatherapp.view.MyListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +39,13 @@ public class WeatherInfoFragment extends Fragment {
     private SwipeRefreshLayout swipe;
     private SwipeRefreshLayout.OnRefreshListener listener;
 
+    private ScrollView scrollView;
+
     private TextView today_temp;
     private TextView today_type;
-//    private GridView index;
-//    private IndexGridViewAdapter gAdapter;
 
-    private List<RelativeLayout> rlsList = new ArrayList<>();
+    private MyListView myListView;
+    private RecentListViewApdapter mAdapter;
 
     private ExpandableListView expandableListView;
     private ExpandableListViewAdapter eAdapter;
@@ -135,44 +133,20 @@ public class WeatherInfoFragment extends Fragment {
     }
 
     private void initView(View v) {
+
+        scrollView = (ScrollView) v.findViewById(R.id.weather_info_scrollview);
+
         today_temp = (TextView) v.findViewById(R.id.today_temp);
         today_type = (TextView) v.findViewById(R.id.today_type);
-//        index = (GridView) v.findViewById(R.id.index);
-//        gAdapter = new IndexGridViewAdapter(new ArrayList<IndexBean>());
-//        index.setAdapter(gAdapter);
         expandableListView = (ExpandableListView) v.findViewById(R.id.expandableListView);
         eAdapter = new ExpandableListViewAdapter(new ArrayList<IndexBean>());
         expandableListView.setAdapter(eAdapter);
-        initRls(v);
+
+        myListView = (MyListView) v.findViewById(R.id.recent_list);
+        mAdapter = new RecentListViewApdapter(new ArrayList<WeatherBean>());
+        myListView.setAdapter(mAdapter);
+
         initRefresh(v);
-    }
-
-    private void initRls(View v) {
-        rlsList.add((RelativeLayout) v.findViewById(R.id.yesterday));
-        rlsList.add((RelativeLayout) v.findViewById(R.id.today));
-        rlsList.add((RelativeLayout) v.findViewById(R.id.tomorrow));
-        rlsList.add((RelativeLayout) v.findViewById(R.id.second));
-        rlsList.add((RelativeLayout) v.findViewById(R.id.thrid));
-        rlsList.add((RelativeLayout) v.findViewById(R.id.forth));
-    }
-
-    private void rlsListDataSet(List<WeatherBean> lwb) {
-        for (int i = 0; i < lwb.size(); i++) {
-            Log.d("WeatherInfoFragment", "i:" + i);
-            rlsList.get(i).setVisibility(View.VISIBLE);
-            if (i == 0) {
-                ((TextView) rlsList.get(i).getChildAt(0)).setText("昨天");
-            } else if (i == 1) {
-                ((TextView) rlsList.get(i).getChildAt(0)).setText("今天");
-            } else if (i == 2) {
-                ((TextView) rlsList.get(i).getChildAt(0)).setText("明天");
-            } else {
-                ((TextView) rlsList.get(i).getChildAt(0)).setText(lwb.get(i).getWeek());
-            }
-            ((TextView) rlsList.get(i).getChildAt(1)).setText(lwb.get(i).getType());
-            ((TextView) rlsList.get(i).getChildAt(2)).setText(lwb.get(i).getHightemp() + "|" + lwb.get(i).getLowtemp());
-            ((TextView) rlsList.get(i).getChildAt(3)).setText(lwb.get(i).getFengli());
-        }
     }
 
     class GetWeatherInfoTask extends AsyncTask<String, Void, RecentWeathersBean> {
@@ -209,8 +183,6 @@ public class WeatherInfoFragment extends Fragment {
     private void postData(RecentWeathersBean recentWeathersBean) {
         today_temp.setText(recentWeathersBean.getRetData().getToday().getCurTemp());
         today_type.setText(recentWeathersBean.getRetData().getToday().getType());
-//        gAdapter.setList(recentWeathersBean.getRetData().getToday().getIndex());
-//        gAdapter.notifyDataSetChanged();
 
         List<WeatherBean> tempList = new ArrayList<>();
         tempList.add(recentWeathersBean.getRetData().getHistory().get(recentWeathersBean.getRetData().getHistory().size() - 1));
@@ -221,10 +193,13 @@ public class WeatherInfoFragment extends Fragment {
         todayInfo.setLowtemp(recentWeathersBean.getRetData().getToday().getLowtemp());
         tempList.add(todayInfo);
         tempList.addAll(recentWeathersBean.getRetData().getForecast());
-        rlsListDataSet(tempList);
+        mAdapter.setList(tempList);
+        mAdapter.notifyDataSetChanged();
+
         eAdapter.setList(recentWeathersBean.getRetData().getToday().getIndex());
         eAdapter.notifyDataSetChanged();
         swipe.setRefreshing(false);
+        scrollView.smoothScrollTo(0,0);
     }
 
 }
