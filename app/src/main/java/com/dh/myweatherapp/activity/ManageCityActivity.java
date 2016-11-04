@@ -141,12 +141,12 @@ public class ManageCityActivity extends AppCompatActivity implements View.OnClic
                 if (mAdapter.isEdit) {
                     mAdapter.isEdit = false;
                     mAdapter.notifyDataSetChanged();
-                    item.setIcon(R.drawable.ic_edit_white_36dp);
+                    item.setIcon(R.drawable.ic_edit_white_24dp);
                     getSupportActionBar().setTitle("城市管理");
                 } else {
                     mAdapter.isEdit = true;
                     mAdapter.notifyDataSetChanged();
-                    item.setIcon(R.drawable.ic_clear_white_36dp);
+                    item.setIcon(R.drawable.ic_clear_white_24dp);
                     getSupportActionBar().setTitle("编辑城市");
                 }
                 return true;
@@ -164,7 +164,7 @@ public class ManageCityActivity extends AppCompatActivity implements View.OnClic
                 mAdapter.isEdit = false;
                 mAdapter.notifyDataSetChanged();
                 MenuItem item = menu.findItem(R.id.action_edit);
-                item.setIcon(R.drawable.ic_edit_white_36dp);
+                item.setIcon(R.drawable.ic_edit_white_24dp);
                 return true;
             }
         }

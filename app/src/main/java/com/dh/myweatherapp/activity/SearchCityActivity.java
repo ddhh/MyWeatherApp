@@ -10,12 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -24,19 +22,14 @@ import com.baidu.location.LocationClientOption;
 import com.dh.myweatherapp.R;
 import com.dh.myweatherapp.adapter.HotCityGridViewAdapter;
 import com.dh.myweatherapp.adapter.SearchCityResultListAdapter;
-import com.dh.myweatherapp.temp.SearchCityResultListAdapter_02;
 import com.dh.myweatherapp.bean.CityBean;
 import com.dh.myweatherapp.bean.CityListBean;
-import com.dh.myweatherapp.temp.SearchCityResultBean;
 import com.dh.myweatherapp.utils.Contacts;
-import com.dh.myweatherapp.temp.DBUtil;
 import com.dh.myweatherapp.utils.HttpUtil;
 import com.dh.myweatherapp.utils.JsonUtil;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
-import java.security.Key;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by 端辉 on 2016/3/24.
