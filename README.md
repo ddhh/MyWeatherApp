@@ -8,8 +8,7 @@
   * 查找天气城市
   * 显示天气信息（天气、温度、各种指数、未来天气）
   * 城市信息的管理（添加、删除）
-  > 天气信息数据来自[Api Store](http://apistore.baidu.com/apiworks/servicedetail/112.html)的免费接口
-
+  > 天气信息数据来自[Api Store](http://apistore.baidu.com/apiworks/servicedetail/112.html)的免费接口，已失效！！！
 ## 用到的技术
 
   * UI是Material Design风格（苦逼不会设计，泪目...）
